@@ -48,14 +48,18 @@ app.get("/api/analyze/stream", async (req, res) => {
 app.get("/api/health", (_req, res) => res.json({ ok: true }));
 app.use("/api", (_req, res) => res.status(404).json({ error: "Not found." }));
 
-// Production: serve the built web app from this same server so one deploy covers everything.
+// Production (single-server hosts like Railway/Render/Fly): serve the built web app from this same server.
+// On Vercel the "client" service owns every non-/api path, so the server stays API-only there.
 const dist = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../../client/dist");
-if (process.env.VITEST !== "true" && fs.existsSync(path.join(dist, "index.html"))) {
+if (process.env.VITEST !== "true" && !process.env.VERCEL && fs.existsSync(path.join(dist, "index.html"))) {
   app.use(express.static(dist, { maxAge: "1h", index: false }));
   app.get("/{*splat}", (_req, res) => res.sendFile(path.join(dist, "index.html")));
 }
 
-if (process.env.VITEST !== "true") {
+// On Vercel the platform invokes the exported app; locally and on other hosts we listen on a port.
+if (process.env.VITEST !== "true" && !process.env.VERCEL) {
   const port = Number(process.env.PORT ?? 8787);
   app.listen(port, () => console.log(`Chariora API on http://localhost:${port}`));
 }
+
+export default app;
