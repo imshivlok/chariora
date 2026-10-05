@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Chariora</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header><span class="logo" aria-hidden="true"></span><strong>Chariora</strong></header>
+
+  <section id="view" aria-live="polite">
+    <p class="domain" id="domain"></p>
+    <div id="gauge" aria-hidden="true"></div>
+    <p class="verdict" id="verdict"></p>
+    <p class="meta" id="meta"></p>
+    <p class="error" id="error" role="alert" hidden></p>
+    <div class="actions">
+      <button id="report" class="primary" hidden>See full report</button>
+      <button id="recheck" class="ghost" hidden>Check again</button>
+    </div>
+  </section>
+
+  <section class="settings">
+    <label class="row"><input type="checkbox" id="autoCheck" /> Auto-check donation pages</label>
+    <details>
+      <summary>Advanced</summary>
+      <label>API server URL<input id="apiBase" type="url" spellcheck="false" /></label>
+      <label>Web app URL<input id="webBase" type="url" spellcheck="false" /></label>
+      <button id="save" class="ghost">Save</button>
+      <p class="hint" id="saveMsg" role="status"></p>
+    </details>
+  </section>
+
+  <footer>Risk indicator, not a legal finding. Only the site address is sent to Chariora, never page content.</footer>
+  <script src="../lib/core.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

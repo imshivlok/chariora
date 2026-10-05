@@ -1,0 +1,18 @@
+{
+  "name": "chariora",
+  "private": true,
+  "scripts": {
+    "dev": "npm run pack:extension && concurrently -n server,client -c teal,magenta \"npm --prefix server run dev\" \"npm --prefix client run dev\"",
+    "test": "npm --prefix server test",
+    "install:all": "npm install && npm --prefix server install && npm --prefix client install",
+    "pack:extension": "node scripts/pack-extension.mjs",
+    "build": "npm run pack:extension && npm --prefix client run build",
+    "start": "npm --prefix server start",
+    "demo": "tsx scripts/demo.mts"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0",
+    "fflate": "^0.8.2",
+    "tsx": "^4.23.15"
+  }
+}
