@@ -34,7 +34,9 @@ app.post("/api/analyze", async (req, res) => {
 
 app.get("/api/analyze/stream", async (req, res) => {
   const p = Body.safeParse({ target: req.query.target });
-  res.set({ "Content-Type": "text/event-stream", "Cache-Control": "no-cache", Connection: "keep-alive" });
+  // No "Connection: keep-alive" header: it is invalid on HTTP/2 (what browsers use to reach Vercel) and can break the stream.
+  res.set({ "Content-Type": "text/event-stream; charset=utf-8", "Cache-Control": "no-cache, no-transform", "X-Accel-Buffering": "no" });
+  res.flushHeaders();
   const send = (event: string, data: unknown) => res.write(`event: ${event}\ndata: ${JSON.stringify(data)}\n\n`);
   if (!p.success) { send("fail", { error: "Provide a 'target' query parameter." }); return res.end(); }
   try {
